@@ -24,8 +24,8 @@ namespace WindowsFormsApplication1
 {
     public partial class Form1 : Form
     {
-        private SerialPort porta;
-        string entrada;
+        private SerialPort porta;  //Instantiate a Serial port
+        string entrada;  //Input Variable
         string temp;
 
         // delegate is used to write to a UI control from a non-UI thread
@@ -36,10 +36,10 @@ namespace WindowsFormsApplication1
             InitializeComponent();
 
 
-            porta = new SerialPort("COM4", 9600);
+            porta = new SerialPort("COM4", 9600);   //Initialized the serial port "COM4"
         }
 
-        
+        // It is necessary introduce this Events in the Load Form
         private void Form1_Load(object sender, EventArgs e)
         {    
             porta.DataReceived += new SerialDataReceivedEventHandler(sp_DataReceived);
@@ -50,7 +50,7 @@ namespace WindowsFormsApplication1
         
         void sp_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            Thread.Sleep(500);
+            Thread.Sleep(500);  //It should be the same is used in the microcontroller (delay)
             entrada = porta.ReadLine();
             this.BeginInvoke(new SetTextDeleg(si_DataReceived), new object[] { entrada });
         }
@@ -59,12 +59,11 @@ namespace WindowsFormsApplication1
         {
 
             string umid;
-            if (entrada.StartsWith("T"))
+            // It is being used string and the frame begin with letter "T"
+            if (entrada.StartsWith("T"))    
             {
                 temp = entrada.Substring(entrada.IndexOf("T") + 1, entrada.IndexOf("U") - 1);
                 umid = entrada.Substring(entrada.IndexOf("U") + 1);
-                //tB_temperatura.Text = temp.Trim();
-                //tB_umi.Text = umid.Trim();
                 textBox1.Text = temp.Trim();
             }
 
